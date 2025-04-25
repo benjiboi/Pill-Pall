@@ -3,21 +3,22 @@
 # include <PubSubClient.h>
 # include <esp_wifi.h>
 # include <Stepper.h>
-# include "thermistor.h"
 
 //LED pin 
 # define RED_PIN 25
 # define GREEN_PIN 26
 
 // Distance Sensor Pin
-# define DISTANCE_PIN 27 
+# define TRIG_PIN 27
+# define ECHO_PIN 34 
 
-float distanceReading; 
+float floatVol; 
 
 int boxWidth = 10; 
 int boxLength = 20; 
-int boxVolume = 20; 
+int boxHeight = 20; 
 
+/*
 // ULN2003 Motor Driver Pins for Closing Mechanisme 
 #define IN1 19
 #define IN2 18
@@ -31,6 +32,7 @@ Stepper myStepper(stepsPerRevolution, IN1, IN3, IN2, IN4);
 
 // 3-5V Motor Pins for pump 
 #define pumpPin 7
+*/
 
 // Network info
 
@@ -51,7 +53,7 @@ WiFiClient espcli;
 PubSubClient client(espcli);
 
 //Function prototype
-float distanceRead(int pin);
+float volume(int pin);
 
 void setup() 
 {
@@ -60,11 +62,15 @@ void setup()
   pinMode(RED_PIN, OUTPUT); 
   pinMode(GREEN_PIN, OUTPUT); 
 
-  pinMode(DISTANCE_PIN, INPUT);
+  pinMode(TRIG_PIN,OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
 
+
+  /* 
   pinMode(pumpPin, OUTPUT);
 
   myStepper.setSpeed(9);
+  */
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password); // attempt to connect
@@ -116,10 +122,10 @@ void loop()
   {
     if(cnt++ > 5000)
     {
-      float distanceReading = distanceRead(DISTANCE_PIN);
-      char distanceString [5]; 
-      dtostrf(distanceReading, 1, 2, distanceString);
-      client.publish(mqtt_topic,distanceString);
+      float floatVol = volume(ECHO_PIN);
+      char volString [5]; 
+      dtostrf(floatVol, 1, 2, volString);
+      client.publish(mqtt_topic,volString);
       cnt = 0;
     }
     client.loop();
@@ -142,38 +148,49 @@ void c_bag(char *topic, byte *payload, unsigned int length)
   messageBuffer[length] = '\0'; // null-terminate string
 
   Serial.print("Payload: ");
-  Serial.println(messageBuffer);
+  Serial.println(messageBuffer[0]);
   Serial.println("==");
 
   //float value = atof(messageBuffer); //Converts payload to float, doesn't really matter 
 
   // Topic check
-  if (strcmp(topic, "s245033@dtu.dk/Test") == 0) {
-    switch (messageBuffer) {
+  if (strcmp(topic, "s245033@dtu.dk/PillPall") == 0) {
+    switch (messageBuffer[0]) {
       case 'A': 
-        Serial.println("Dispensing 100 mL")
+        Serial.println("Dispensing 100 mL");
+        break;
         //Dispensing 100 mL 
       case 'B': 
-        Seria.println("Dispensing 150 mL")
+        Serial.println("Dispensing 150 mL");
+        break;
         //Dispensing 150 mL 
       case 'C': 
-        Serial.println("Dispensing 200 mL")
+        Serial.println("Dispensing 200 mL");
+        break;
         //Dispensing 200 mL 
       case 'D': 
         //Opening infusion
-        Serial.println("Opening valve and starting dispensing IV-solution")
+        Serial.println("Opening valve and starting dispensing IV-solution");
         digitalWrite(GREEN_PIN,HIGH);
         digitalWrite(RED_PIN,LOW);
+        break;
       case 'E': 
         //Closing infusion
-        Serial.println("Closing valve and stopping dispensing IV-solution")
+        Serial.println("Closing valve and stopping dispensing IV-solution");
         digitalWrite(GREEN_PIN,LOW);
         digitalWrite(RED_PIN,HIGH); 
+        break; 
       default: 
-        Serial.println("What? ")
+        Serial.println("What? ");
+        break;
     }
   }
 }
 
-//Function prototype
-float distanceRead(int pin);
+//volume function 
+float volume(int pin) {
+  int duration = pulseIn(pin, HIGH);
+  float distance = (duration*.0343)/2;
+  float volume = (boxWidth*boxLength*(boxHeight-distance)); 
+  return volume;
+}
