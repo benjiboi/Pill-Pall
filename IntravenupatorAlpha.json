@@ -1,0 +1,588 @@
+[
+    {
+        "id": "b1c3eb67b67cdda0",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0e3fbcbef5939d0a",
+        "type": "mqtt out",
+        "z": "b1c3eb67b67cdda0",
+        "name": "",
+        "topic": "s245033@dtu.dk/PillPall",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "520f7622581ff376",
+        "x": 470,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "9b76ab946c44adf4",
+        "type": "ui_button",
+        "z": "b1c3eb67b67cdda0",
+        "name": "",
+        "group": "7fcf760accdaa9c2",
+        "order": 2,
+        "width": 3,
+        "height": 2,
+        "passthru": false,
+        "label": "100 ml",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "teal",
+        "className": "",
+        "icon": "fa-tint",
+        "payload": "A",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 210,
+        "y": 60,
+        "wires": [
+            [
+                "0e3fbcbef5939d0a"
+            ]
+        ]
+    },
+    {
+        "id": "54f62308c14ad415",
+        "type": "ui_button",
+        "z": "b1c3eb67b67cdda0",
+        "name": "",
+        "group": "7fcf760accdaa9c2",
+        "order": 7,
+        "width": 3,
+        "height": 2,
+        "passthru": false,
+        "label": "150 ml",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "teal",
+        "className": "",
+        "icon": "fa-shower",
+        "payload": "B",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 210,
+        "y": 140,
+        "wires": [
+            [
+                "0e3fbcbef5939d0a"
+            ]
+        ]
+    },
+    {
+        "id": "310e5569382c592b",
+        "type": "ui_button",
+        "z": "b1c3eb67b67cdda0",
+        "name": "",
+        "group": "7fcf760accdaa9c2",
+        "order": 12,
+        "width": 3,
+        "height": 2,
+        "passthru": false,
+        "label": "200 ml",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "teal",
+        "className": "",
+        "icon": "fa-umbrella",
+        "payload": "C",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 210,
+        "y": 220,
+        "wires": [
+            [
+                "0e3fbcbef5939d0a"
+            ]
+        ]
+    },
+    {
+        "id": "dd1cd71453237797",
+        "type": "ui_button",
+        "z": "b1c3eb67b67cdda0",
+        "name": "",
+        "group": "64ec272c1b92e46b",
+        "order": 2,
+        "width": 4,
+        "height": 3,
+        "passthru": false,
+        "label": "Start IV-drop",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "green",
+        "className": "",
+        "icon": "fa-eyedropper",
+        "payload": "D",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 230,
+        "y": 300,
+        "wires": [
+            [
+                "0e3fbcbef5939d0a"
+            ]
+        ]
+    },
+    {
+        "id": "1704eda830f40df0",
+        "type": "ui_button",
+        "z": "b1c3eb67b67cdda0",
+        "name": "",
+        "group": "64ec272c1b92e46b",
+        "order": 9,
+        "width": 4,
+        "height": 3,
+        "passthru": false,
+        "label": "Stop IV-drop",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "red",
+        "className": "",
+        "icon": "fa-ban",
+        "payload": "E",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 230,
+        "y": 380,
+        "wires": [
+            [
+                "0e3fbcbef5939d0a"
+            ]
+        ]
+    },
+    {
+        "id": "da56726effa31aca",
+        "type": "mqtt in",
+        "z": "b1c3eb67b67cdda0",
+        "name": "",
+        "topic": "s245033@dtu.dk/PillPall",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "520f7622581ff376",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 470,
+        "y": 280,
+        "wires": [
+            [
+                "6f632889468505fd"
+            ]
+        ]
+    },
+    {
+        "id": "6f632889468505fd",
+        "type": "function",
+        "z": "b1c3eb67b67cdda0",
+        "name": "function 1",
+        "func": "let value = parseFloat(msg.payload);\n\nif (!isNaN(value)) {\n    msg.payload = value;\n    return msg;\n} else {\n    return null; \n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 280,
+        "wires": [
+            [
+                "e00d832b840b92b7",
+                "3edfa9026f53eb11"
+            ]
+        ]
+    },
+    {
+        "id": "e00d832b840b92b7",
+        "type": "ui_template",
+        "z": "b1c3eb67b67cdda0",
+        "group": "d5206e7b04e7f128",
+        "name": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 20px; display: flex; align-items: center;\">\n    <i class=\"material-icons\" style=\"color: teal;\">water_drop</i>\n    <span style=\"margin-left: 10px;\">Current volume: {{msg.payload}} mL</span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 840,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3edfa9026f53eb11",
+        "type": "ui_chart",
+        "z": "b1c3eb67b67cdda0",
+        "name": "",
+        "group": "d5206e7b04e7f128",
+        "order": 2,
+        "width": 9,
+        "height": 5,
+        "label": "IV-bag volume (Last hour)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#53d053",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 850,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4b50b78ceb89af71",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 1,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "7ddb8414221d9773",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "dd1d1b1aaa67718e",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 4,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "8ff6503cf40fe94c",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 5,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "f053f6e0fcde852b",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "fa73839781b3c952",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 7,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "1ff7072a73eeb40a",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 8,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "b350cabc95865e68",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 10,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "1f6d6b266480c718",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 11,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "ee235c15ba0b87d4",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 12,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "f8a4fcba3d6e680f",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 13,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "c3371b79f55525af",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 14,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "aba46181d1db4ce7",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 1,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "e7de9b5c0ecfd23d",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "d069b9dd569c2f56",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 4,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "647046944c0ce082",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 5,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "60c086f91bfcda5e",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "e7ed50eb4d97e619",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 8,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "b5b23a1e81d8f5b1",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 9,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "2d888de6221fe8bd",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 10,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "f7ddc376040c8992",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 11,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "fddad8c6316073b1",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 13,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "2831e4cd5fb0235a",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 14,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "c54803d1a5cc0822",
+        "type": "ui_spacer",
+        "z": "b1c3eb67b67cdda0",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 15,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "520f7622581ff376",
+        "type": "mqtt-broker",
+        "name": "Maqiatto",
+        "broker": "maqiatto.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "7fcf760accdaa9c2",
+        "type": "ui_group",
+        "name": "Refill IV-bag",
+        "tab": "b25157bd1777aeab",
+        "order": 3,
+        "disp": true,
+        "width": 5,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "64ec272c1b92e46b",
+        "type": "ui_group",
+        "name": "Administor to patient",
+        "tab": "b25157bd1777aeab",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d5206e7b04e7f128",
+        "type": "ui_group",
+        "name": "IV-bag volume status",
+        "tab": "b25157bd1777aeab",
+        "order": 2,
+        "disp": true,
+        "width": 9,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b25157bd1777aeab",
+        "type": "ui_tab",
+        "name": "Intravenupator alpha v.1",
+        "icon": "healing",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
