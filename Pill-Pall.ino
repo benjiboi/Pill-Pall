@@ -14,6 +14,10 @@
 
 float distanceReading; 
 
+int boxWidth = 10; 
+int boxLength = 20; 
+int boxVolume = 20; 
+
 // ULN2003 Motor Driver Pins for Closing Mechanisme 
 #define IN1 19
 #define IN2 18
@@ -38,7 +42,7 @@ const char* password = "MadsErSej";
 // Maqiatto MQTT info
 const char *mqtt_user = "s245033@dtu.dk";
 const char *mqtt_pword = "SynthWars2025";
-const char *mqtt_topic = "s245033@dtu.dk/Test";
+const char *mqtt_topic = "s245033@dtu.dk/PillPall";
 
 int cnt = 0;
 String clientID;
@@ -46,6 +50,7 @@ String clientID;
 WiFiClient espcli;
 PubSubClient client(espcli);
 
+//Function prototype
 float distanceRead(int pin);
 
 void setup() 
@@ -111,31 +116,11 @@ void loop()
   {
     if(cnt++ > 5000)
     {
-      float tempFloat = ReadTemp(NTC_PIN);
-      char tempString [5]; 
-      dtostrf(tempFloat, 1, 2, tempString);
-      client.publish(mqtt_topic,tempString);
+      float distanceReading = distanceRead(DISTANCE_PIN);
+      char distanceString [5]; 
+      dtostrf(distanceReading, 1, 2, distanceString);
+      client.publish(mqtt_topic,distanceString);
       cnt = 0;
-
-      if (20 <= tempFloat && tempFloat <= 25) {
-        green = 255;
-        blue = map(tempFloat, 20, 25, 20, 0);
-        red = map(tempFloat,20, 25, 0, 20);
-      }
-      else if (tempFloat < 20) {
-        green = map(tempFloat,15,20,0,255);
-        blue = map(tempFloat, 15, 20, 255, 20);
-        red = 0;
-      }
-      else {
-        green = map(tempFloat,25,30,225,0);
-        red = map(tempFloat, 25, 30, 20, 255);
-        blue = 0;
-      }
-      ledcWrite(RED_PIN,red);
-      ledcWrite(GREEN_PIN,green);
-      ledcWrite(BLUE_PIN,blue);
-      
     }
     client.loop();
     delay(1);
@@ -160,19 +145,35 @@ void c_bag(char *topic, byte *payload, unsigned int length)
   Serial.println(messageBuffer);
   Serial.println("==");
 
-  float value = atof(messageBuffer);
+  //float value = atof(messageBuffer); //Converts payload to float, doesn't really matter 
 
   // Topic check
   if (strcmp(topic, "s245033@dtu.dk/Test") == 0) {
-    if (strcmp(messageBuffer, "ShutOff") == 0) {
-      Serial.println("Executing shut-off protocol...");
-      myStepper.step(stepsPerRevolution);
-      delay(1000); //Button most be pressed for 1 sec
-      myStepper.step(stepsPerRevolution);
-    } 
-    else {
-      Serial.print("Temperature received: ");
-      Serial.println(value);
+    switch (messageBuffer) {
+      case 'A': 
+        Serial.println("Dispensing 100 mL")
+        //Dispensing 100 mL 
+      case 'B': 
+        Seria.println("Dispensing 150 mL")
+        //Dispensing 150 mL 
+      case 'C': 
+        Serial.println("Dispensing 200 mL")
+        //Dispensing 200 mL 
+      case 'D': 
+        //Opening infusion
+        Serial.println("Opening valve and starting dispensing IV-solution")
+        digitalWrite(GREEN_PIN,HIGH);
+        digitalWrite(RED_PIN,LOW);
+      case 'E': 
+        //Closing infusion
+        Serial.println("Closing valve and stopping dispensing IV-solution")
+        digitalWrite(GREEN_PIN,LOW);
+        digitalWrite(RED_PIN,HIGH); 
+      default: 
+        Serial.println("What? ")
     }
   }
 }
+
+//Function prototype
+float distanceRead(int pin);
