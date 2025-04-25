@@ -12,8 +12,6 @@
 # define TRIG_PIN 27
 # define ECHO_PIN 34 
 
-float floatVol; 
-
 int boxWidth = 10; 
 int boxLength = 20; 
 int boxHeight = 20; 
@@ -52,8 +50,10 @@ String clientID;
 WiFiClient espcli;
 PubSubClient client(espcli);
 
-//Function prototype
-float volume(int pin);
+//Function prototypes
+float volume(void)
+
+void motorstart(int time);
 
 void setup() 
 {
@@ -122,9 +122,10 @@ void loop()
   {
     if(cnt++ > 5000)
     {
-      float floatVol = volume(ECHO_PIN);
+      float volFloat = volume();
+      Serial.println(volFloat);
       char volString [5]; 
-      dtostrf(floatVol, 1, 2, volString);
+      dtostrf(volFloat, 1, 2, volString);
       client.publish(mqtt_topic,volString);
       cnt = 0;
     }
@@ -148,7 +149,7 @@ void c_bag(char *topic, byte *payload, unsigned int length)
   messageBuffer[length] = '\0'; // null-terminate string
 
   Serial.print("Payload: ");
-  Serial.println(messageBuffer[0]);
+  Serial.println(messageBuffer);
   Serial.println("==");
 
   //float value = atof(messageBuffer); //Converts payload to float, doesn't really matter 
@@ -158,6 +159,7 @@ void c_bag(char *topic, byte *payload, unsigned int length)
     switch (messageBuffer[0]) {
       case 'A': 
         Serial.println("Dispensing 100 mL");
+        motortime(100);
         break;
         //Dispensing 100 mL 
       case 'B': 
@@ -181,16 +183,29 @@ void c_bag(char *topic, byte *payload, unsigned int length)
         digitalWrite(RED_PIN,HIGH); 
         break; 
       default: 
-        Serial.println("What? ");
+        Serial.println("Volume of doom-bag is:");
+        Serial.println(messageBuffer);
         break;
     }
   }
 }
 
 //volume function 
-float volume(int pin) {
-  int duration = pulseIn(pin, HIGH);
+float volume(void) {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  int duration = pulseIn(ECHO_PIN, HIGH);
+  Serial.println(duration);
   float distance = (duration*.0343)/2;
+  Serial.println(distance);
   float volume = (boxWidth*boxLength*(boxHeight-distance)); 
+  Serial.println(volume);
   return volume;
+}
+
+void motorstart(int time){
+  
 }
