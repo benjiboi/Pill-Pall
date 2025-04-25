@@ -1,0 +1,735 @@
+[
+    {
+        "id": "e2af8452c5ac0d96",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "b76fc8534b7c64d8",
+        "type": "mqtt in",
+        "z": "e2af8452c5ac0d96",
+        "name": "",
+        "topic": "s245033@dtu.dk/Test",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "e459e3ecf871a772",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 240,
+        "wires": [
+            [
+                "5cedace69639aed2"
+            ]
+        ]
+    },
+    {
+        "id": "5e6b69f4ebd40a12",
+        "type": "ui_button",
+        "z": "e2af8452c5ac0d96",
+        "name": "",
+        "group": "bead08590ab57118",
+        "order": 2,
+        "width": 5,
+        "height": 2,
+        "passthru": false,
+        "label": "Execute shut-off protocol",
+        "tooltip": "",
+        "color": "black",
+        "bgcolor": "red",
+        "className": "",
+        "icon": "report_problem",
+        "payload": "ShutOff",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 590,
+        "y": 380,
+        "wires": [
+            [
+                "868a4fa98063f27c",
+                "4b323ef47522c3d9",
+                "0ff49a07c4f5eb67"
+            ]
+        ]
+    },
+    {
+        "id": "19a67621984fd12a",
+        "type": "ui_template",
+        "z": "e2af8452c5ac0d96",
+        "group": "9bbb48f808b60aaf",
+        "name": "Temperature reading",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 20px; display: flex; align-items: center;\">\n    <i class=\"material-icons\" style=\"color: red;\">device_thermostat</i>\n    <span style=\"margin-left: 10px;\">Temperature: {{msg.payload}} °C</span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 720,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b4bdc278417aafac",
+        "type": "function",
+        "z": "e2af8452c5ac0d96",
+        "name": "Warning Message",
+        "func": "var temperature = flow.get(\"Temperature\");\n\nif (temperature === undefined) {\n    temperature = -273.15; \n}\n\nif (temperature > 40) {\n    msg.icon = \"whatshot\";\n    msg.color = \"red\";\n    msg.text = \"Temperature too high! Execute shut-off protocol\";\n\n} else if (temperature <15) {\n    msg.icon = \"ac_unit\";\n    msg.color = \"blue\";\n    msg.text = \"Temperature too low! Too bad!\";\n}\nelse {\n    msg.icon = \"thumb_up\";\n    msg.color = \"green\";\n    msg.text = \"Temperature accepted. This is fine.\";\n}\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 320,
+        "wires": [
+            [
+                "e4f487b4d2ad9622"
+            ]
+        ]
+    },
+    {
+        "id": "e4f487b4d2ad9622",
+        "type": "ui_template",
+        "z": "e2af8452c5ac0d96",
+        "group": "9bbb48f808b60aaf",
+        "name": "Error message",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 20px; display: flex; align-items: center;\">\n    <i class=\"material-icons\" style=\"color: {{msg.color}};\">{{msg.icon}}</i>\n    <span style=\"margin-left: 10px;\">{{msg.text}}</span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 840,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "62ef6ef26531831e",
+        "type": "inject",
+        "z": "e2af8452c5ac0d96",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "-10",
+        "payloadType": "num",
+        "x": 130,
+        "y": 560,
+        "wires": [
+            [
+                "5cedace69639aed2"
+            ]
+        ]
+    },
+    {
+        "id": "868a4fa98063f27c",
+        "type": "function",
+        "z": "e2af8452c5ac0d96",
+        "name": "Iniatiation message logic",
+        "func": "if (msg.payload == \"ShutOff\") {\n    msg.icon = \"power_settings_new\";\n    msg.color = \"black\";\n    msg.text = \"Initiating shut-off protocol...\";\n    return msg;\n}\n\nif (msg.payload === \"\" || msg.payload === null) {\n    msg.icon = \"\";\n    msg.color = \"\";\n    msg.text = \"\";\n    return msg;\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 380,
+        "wires": [
+            [
+                "43b51a2059d79c17",
+                "2b13b1cdc2b60607"
+            ]
+        ]
+    },
+    {
+        "id": "43b51a2059d79c17",
+        "type": "ui_template",
+        "z": "e2af8452c5ac0d96",
+        "group": "bead08590ab57118",
+        "name": "Procedure initiation",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 20px; display: flex; align-items: center; justify-content: center; text-align: center;\">\n    <i class=\"material-icons\" style=\"color: {{msg.color}}; margin-right: 10px;\">{{msg.icon}}</i>\n    <span>{{msg.text}}</span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1230,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2b13b1cdc2b60607",
+        "type": "delay",
+        "z": "e2af8452c5ac0d96",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 980,
+        "y": 540,
+        "wires": [
+            [
+                "b24046d749a2389e"
+            ]
+        ]
+    },
+    {
+        "id": "b24046d749a2389e",
+        "type": "function",
+        "z": "e2af8452c5ac0d96",
+        "name": "Reset",
+        "func": "msg.icon = \"\";\nmsg.color = \"\";\nmsg.text = \"\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 540,
+        "wires": [
+            [
+                "43b51a2059d79c17"
+            ]
+        ]
+    },
+    {
+        "id": "2ca5a113401bbb15",
+        "type": "ui_chart",
+        "z": "e2af8452c5ac0d96",
+        "name": "",
+        "group": "44df4f1039ef07f7",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "10",
+        "ymax": "40",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#358fd0",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 510,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4b323ef47522c3d9",
+        "type": "mqtt out",
+        "z": "e2af8452c5ac0d96",
+        "name": "",
+        "topic": "s245033@dtu.dk/Test",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "be6cdf8ff3336e67",
+        "x": 900,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "b0de68cb23f80559",
+        "type": "e-mail",
+        "z": "e2af8452c5ac0d96",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "authtype": "BASIC",
+        "saslformat": false,
+        "token": "oauth2Response.access_token",
+        "secure": true,
+        "tls": false,
+        "name": "madsenfilms@gmail.com",
+        "dname": "E-Mail Update",
+        "x": 1160,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "0ff49a07c4f5eb67",
+        "type": "switch",
+        "z": "e2af8452c5ac0d96",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ShutOff",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 520,
+        "wires": [
+            [
+                "18be62bfc6f25c01"
+            ]
+        ]
+    },
+    {
+        "id": "18be62bfc6f25c01",
+        "type": "function",
+        "z": "e2af8452c5ac0d96",
+        "name": "Current Time",
+        "func": "let now = new Date(); \nmsg.now = now.toISOString();  \nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 700,
+        "wires": [
+            [
+                "2d5979b2df591bb4",
+                "56a2b53d7c6cf006"
+            ]
+        ]
+    },
+    {
+        "id": "5cedace69639aed2",
+        "type": "function",
+        "z": "e2af8452c5ac0d96",
+        "name": "Temperature Value",
+        "func": "if (typeof msg.payload === 'number') {\n    flow.set(\"Temperature\", msg.payload);\n    return msg;\n} else {\n    return null;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 440,
+        "wires": [
+            [
+                "5e6b69f4ebd40a12",
+                "2ca5a113401bbb15",
+                "1c6ba7b997791ccd",
+                "b4bdc278417aafac",
+                "d1c4bf543acf5de1",
+                "3eeaadd9d659cb02"
+            ]
+        ]
+    },
+    {
+        "id": "2d5979b2df591bb4",
+        "type": "template",
+        "z": "e2af8452c5ac0d96",
+        "name": "Email Message",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "PC status update! \n\nThe shut-off protocol was executed at: {{ now }}.\nThe temperature was: {{flow.Temperature}} C.\nHope you didn't have anything important open.\n\nKind regards\nYour autonomous ESP32 PC temperature monotoring system :D\n",
+        "output": "str",
+        "x": 960,
+        "y": 640,
+        "wires": [
+            [
+                "b0de68cb23f80559"
+            ]
+        ]
+    },
+    {
+        "id": "1c6ba7b997791ccd",
+        "type": "function",
+        "z": "e2af8452c5ac0d96",
+        "name": "Current Time",
+        "func": "let now = new Date();  // get current date/time\nmsg.now = now.toISOString();  \nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 260,
+        "wires": [
+            [
+                "22f4db94bc0cf39f",
+                "151114a2012a6e1b"
+            ]
+        ]
+    },
+    {
+        "id": "22f4db94bc0cf39f",
+        "type": "ui_template",
+        "z": "e2af8452c5ac0d96",
+        "group": "9bbb48f808b60aaf",
+        "name": "Last recieved",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 20px; display: flex; align-items: center;\">\n    <i class=\"material-icons\" style=\"color: yellow;\">access_time</i>\n    <span style=\"margin-left: 10px;\">Sensor reading last recieved: {{msg.now}} </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 840,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "56a2b53d7c6cf006",
+        "type": "ui_template",
+        "z": "e2af8452c5ac0d96",
+        "group": "bead08590ab57118",
+        "name": "Last executed",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 20px; display: flex; align-items: center;\">\n    <i class=\"material-icons\" style=\"color: red;\">alarm</i>\n    <span style=\"margin-left: 10px;\">Shut-off protocol last executed: {{msg.now}} </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 960,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "053239d8d5246909",
+        "type": "template",
+        "z": "e2af8452c5ac0d96",
+        "name": "Email Message",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "PC status update! \n\nYour PC has reached a temperature of: {{flow.Temperature}} C.\nThis temperature was registered at: {{now}}.\nThe Termperinator 1000 does currently not offer protocols for handling low temperatures.\nBest of luck.\n\nKind regards\nYour autonomous ESP32 PC temperature monotoring system :D\n",
+        "output": "str",
+        "x": 1020,
+        "y": 180,
+        "wires": [
+            [
+                "abd2da0ba8980dee"
+            ]
+        ]
+    },
+    {
+        "id": "151114a2012a6e1b",
+        "type": "switch",
+        "z": "e2af8452c5ac0d96",
+        "name": "",
+        "property": "Temperature",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "lte",
+                "v": "15",
+                "vt": "num"
+            },
+            {
+                "t": "gte",
+                "v": "40",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 830,
+        "y": 220,
+        "wires": [
+            [
+                "053239d8d5246909"
+            ],
+            [
+                "14485179bd54403b"
+            ]
+        ]
+    },
+    {
+        "id": "14485179bd54403b",
+        "type": "template",
+        "z": "e2af8452c5ac0d96",
+        "name": "Email Message",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "PC status update! \n\nYour gaming setup is lit! \nLiterally for your PC has reached a temperature of: {{flow.Temperature}} C.\nThis temperature was registered at: {{now}}.\nPlease open localhost:1880 and activate shut-off protocol...\n...f you feel like it.\n\nKind regards\nYour autonomous ESP32 PC temperature monotoring system 😃",
+        "output": "str",
+        "x": 1020,
+        "y": 240,
+        "wires": [
+            [
+                "abd2da0ba8980dee"
+            ]
+        ]
+    },
+    {
+        "id": "abd2da0ba8980dee",
+        "type": "e-mail",
+        "z": "e2af8452c5ac0d96",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "authtype": "BASIC",
+        "saslformat": false,
+        "token": "oauth2Response.access_token",
+        "secure": true,
+        "tls": false,
+        "name": "madsenfilms@gmail.com",
+        "dname": "E-Mail Update",
+        "x": 1220,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "d1c4bf543acf5de1",
+        "type": "debug",
+        "z": "e2af8452c5ac0d96",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "3eeaadd9d659cb02",
+        "type": "function",
+        "z": "e2af8452c5ac0d96",
+        "name": "Converts bytes to string object",
+        "func": "msg.payload = String(msg.payload).trim();\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 100,
+        "wires": [
+            [
+                "19a67621984fd12a"
+            ]
+        ]
+    },
+    {
+        "id": "2dafae52702df7ab",
+        "type": "ui_spacer",
+        "z": "e2af8452c5ac0d96",
+        "name": "spacer",
+        "group": "bead08590ab57118",
+        "order": 1,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "d8c7e77bae615389",
+        "type": "ui_spacer",
+        "z": "e2af8452c5ac0d96",
+        "name": "spacer",
+        "group": "bead08590ab57118",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "7edce69f0fa7532e",
+        "type": "ui_spacer",
+        "z": "e2af8452c5ac0d96",
+        "name": "spacer",
+        "group": "bead08590ab57118",
+        "order": 4,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "bb56b444675082ef",
+        "type": "ui_spacer",
+        "z": "e2af8452c5ac0d96",
+        "name": "spacer",
+        "group": "bead08590ab57118",
+        "order": 5,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "e459e3ecf871a772",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "maqiatto.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "bead08590ab57118",
+        "type": "ui_group",
+        "name": "Protocols",
+        "tab": "a0e0ef549465d494",
+        "order": 3,
+        "disp": true,
+        "width": 7,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "9bbb48f808b60aaf",
+        "type": "ui_group",
+        "name": "ESP32 monitoring system",
+        "tab": "a0e0ef549465d494",
+        "order": 1,
+        "disp": true,
+        "width": 7,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "44df4f1039ef07f7",
+        "type": "ui_group",
+        "name": "Temperature readings (Last hour)",
+        "tab": "a0e0ef549465d494",
+        "order": 2,
+        "disp": true,
+        "width": "10",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "be6cdf8ff3336e67",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "maqiatto.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "a0e0ef549465d494",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "thermometer-4",
+        "disabled": false,
+        "hidden": false
+    }
+]
