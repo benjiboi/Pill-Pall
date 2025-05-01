@@ -1,8 +1,8 @@
-# include <Arduino.h>
+// # include <Arduino.h>
 # include <WiFi.h>
 # include <PubSubClient.h>
 # include <esp_wifi.h>
-# include <Stepper.h>
+// # include <Stepper.h>
 
 //LED pin 
 # define RED_PIN 25
@@ -16,21 +16,10 @@ int boxWidth = 10;
 int boxLength = 20; 
 int boxHeight = 20; 
 
-/*
 // ULN2003 Motor Driver Pins for Closing Mechanisme 
-#define IN1 19
-#define IN2 18
-#define IN3 5
-#define IN4 17
-
-const int stepsPerRevolution = 2048/2;  // change this to fit the number of steps per revolution
-
-// initialize the stepper library
-Stepper myStepper(stepsPerRevolution, IN1, IN3, IN2, IN4);
-
-// 3-5V Motor Pins for pump 
-#define pumpPin 7
-*/
+#define dirPin 18
+#define stepPin 19
+const int stepsPerRevolution = 1600;
 
 // Network info
 
@@ -51,9 +40,9 @@ WiFiClient espcli;
 PubSubClient client(espcli);
 
 //Function prototypes
-float volume(void)
+float volume(void);
 
-void motorstart(int time);
+void motorstart(float setVolume);
 
 void setup() 
 {
@@ -76,15 +65,15 @@ void setup()
   WiFi.begin(ssid, password); // attempt to connect
 
   Serial.println();
-  Serial.println("Wait for WiFi.. ");
+  Serial.println(F("Wait for WiFi.. "));
 
   while (WiFi.status() != WL_CONNECTED) { //wait to connect
     delay(500);
-    Serial.print(".");
+    Serial.print(F("."));
   }
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
+  Serial.println(F(""));
+  Serial.println(F("WiFi connected"));
+  Serial.println(F("IP address: "));
   Serial.println(WiFi.localIP());
 
   delay(500);
@@ -103,16 +92,16 @@ void loop()
 { 
   if(!client.connected()) 
   {
-    Serial.println("Connecting to MQTT...");
+    Serial.println(F("Connecting to MQTT..."));
     
     if (client.connect(clientID.c_str(), mqtt_user, mqtt_pword)) 
     {
-      Serial.println("Connected"); 
+      Serial.println(F("Connected")); 
       client.subscribe(mqtt_topic);
     } 
     else 
     {
-      Serial.print("failed with state ");
+      Serial.print(F("failed with state "));
       Serial.print(client.state());
       Serial.println();
       delay(2000);
@@ -136,11 +125,11 @@ void loop()
 
 void c_bag(char *topic, byte *payload, unsigned int length)
 {
-  Serial.print("Topic: ");
+  Serial.print(F("Topic: "));
   Serial.println(topic);
 
   if (length == 0) {
-    Serial.println("Empty payload received!");
+    Serial.println(F("Empty payload received!"));
     return;
   }
 
@@ -148,7 +137,7 @@ void c_bag(char *topic, byte *payload, unsigned int length)
   memcpy(messageBuffer, payload, length);
   messageBuffer[length] = '\0'; // null-terminate string
 
-  Serial.print("Payload: ");
+  Serial.print(F("Payload: "));
   Serial.println(messageBuffer);
   Serial.println("==");
 
@@ -158,32 +147,34 @@ void c_bag(char *topic, byte *payload, unsigned int length)
   if (strcmp(topic, "s245033@dtu.dk/PillPall") == 0) {
     switch (messageBuffer[0]) {
       case 'A': 
-        Serial.println("Dispensing 100 mL");
-        motortime(100);
+        Serial.println(F("Dispensing 100 mL"));
+        motorstart(100.0);
         break;
         //Dispensing 100 mL 
       case 'B': 
-        Serial.println("Dispensing 150 mL");
+        Serial.println(F("Dispensing 150 mL"));
+        motorstart(150.0);
         break;
         //Dispensing 150 mL 
       case 'C': 
-        Serial.println("Dispensing 200 mL");
+        Serial.println(F("Dispensing 200 mL"));
+        motorstart(200.0);
         break;
         //Dispensing 200 mL 
       case 'D': 
         //Opening infusion
-        Serial.println("Opening valve and starting dispensing IV-solution");
+        Serial.println(F("Opening valve and starting dispensing IV-solution"));
         digitalWrite(GREEN_PIN,HIGH);
         digitalWrite(RED_PIN,LOW);
         break;
       case 'E': 
         //Closing infusion
-        Serial.println("Closing valve and stopping dispensing IV-solution");
+        Serial.println(F("Closing valve and stopping dispensing IV-solution"));
         digitalWrite(GREEN_PIN,LOW);
         digitalWrite(RED_PIN,HIGH); 
         break; 
       default: 
-        Serial.println("Volume of doom-bag is:");
+        Serial.println(F("Volume of doom-bag is:"));
         Serial.println(messageBuffer);
         break;
     }
@@ -206,6 +197,15 @@ float volume(void) {
   return volume;
 }
 
-void motorstart(int time){
-  
+void motorstart(float setVolume){
+  digitalWrite(dirPin, HIGH);
+
+  while (volume() < setVolume){
+    digitalWrite(stepPin, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(stepPin, LOW);
+    delayMicroseconds(1000);
+  }
+  Serial.println(F("Bag refilled!"));
+  return;
 }
