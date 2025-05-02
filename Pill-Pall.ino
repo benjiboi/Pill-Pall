@@ -60,6 +60,9 @@ void setup()
 
   servomotor.attach(servoPin);
 
+  pinMode(stepPin,OUTPUT);
+  pinMode(dirPin, OUTPUT);
+
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password); // attempt to connect
 
@@ -200,12 +203,38 @@ float volume(void) {
 
 void motorstart(float setVolume){
   digitalWrite(dirPin, HIGH);
-
-  while (volume() < setVolume){
-    digitalWrite(stepPin, HIGH);
+  /*
+  for (int i = 0; i < stepsPerRevolution; i++) {
+     digitalWrite(stepPin, HIGH);
+    Serial.println("Starting motor");
     delayMicroseconds(1000);
     digitalWrite(stepPin, LOW);
+    Serial.println("Stopping motor");
     delayMicroseconds(1000);
+  }*/
+  float vol = volume();
+  delay(60);
+  while (vol < setVolume) {
+    /*
+    for (int i = 0; i < stepsPerRevolution/4; i++) {
+    digitalWrite(stepPin, HIGH);
+    Serial.println("Starting motor");
+    delayMicroseconds(1000);
+    digitalWrite(stepPin, LOW);
+    Serial.println("Stopping motor");
+    delayMicroseconds(1000);
+    }
+    */
+    
+    digitalWrite(stepPin, HIGH);
+    Serial.println("Starting motor");
+    delayMicroseconds(1000);
+    digitalWrite(stepPin, LOW);
+    Serial.println("Stopping motor");
+    delayMicroseconds(1000);
+    
+    vol = volume();
+    delay(40);
   }
   Serial.println(F("Bag refilled!"));
   return;
