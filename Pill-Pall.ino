@@ -2,7 +2,7 @@
 # include <WiFi.h>
 # include <PubSubClient.h>
 # include <esp_wifi.h>
-// # include <Stepper.h>
+#include <ESP32Servo.h>
 
 //LED pin 
 # define RED_PIN 25
@@ -12,14 +12,18 @@
 # define TRIG_PIN 27
 # define ECHO_PIN 34 
 
-int boxWidth = 10; 
-int boxLength = 20; 
-int boxHeight = 20; 
+int boxWidth = 5.5; 
+int boxLength = 5.5; 
+int boxHeight = 14; 
 
-// ULN2003 Motor Driver Pins for Closing Mechanisme 
+// ULN2003 Motor Driver Pins for Pump mechanism  
 #define dirPin 18
 #define stepPin 19
 const int stepsPerRevolution = 1600;
+
+//Servo motor driver pin 
+#define servoPin 12 
+Servo servomotor;
 
 // Network info
 
@@ -54,12 +58,7 @@ void setup()
   pinMode(TRIG_PIN,OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
-
-  /* 
-  pinMode(pumpPin, OUTPUT);
-
-  myStepper.setSpeed(9);
-  */
+  servomotor.attach(servoPin);
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password); // attempt to connect
@@ -166,12 +165,14 @@ void c_bag(char *topic, byte *payload, unsigned int length)
         Serial.println(F("Opening valve and starting dispensing IV-solution"));
         digitalWrite(GREEN_PIN,HIGH);
         digitalWrite(RED_PIN,LOW);
+        servomotor.write(0);
         break;
       case 'E': 
         //Closing infusion
         Serial.println(F("Closing valve and stopping dispensing IV-solution"));
         digitalWrite(GREEN_PIN,LOW);
         digitalWrite(RED_PIN,HIGH); 
+        servomotor.write(180);
         break; 
       default: 
         Serial.println(F("Volume of doom-bag is:"));
