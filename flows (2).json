@@ -1,0 +1,955 @@
+[
+    {
+        "id": "e255beb7def6ab14",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bf41547e78254b9b",
+        "type": "mqtt out",
+        "z": "e255beb7def6ab14",
+        "name": "",
+        "topic": "s245033@dtu.dk/PillPall",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "520f7622581ff376",
+        "x": 470,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "e628f825a7013586",
+        "type": "ui_button",
+        "z": "e255beb7def6ab14",
+        "name": "",
+        "group": "7fcf760accdaa9c2",
+        "order": 2,
+        "width": 3,
+        "height": 2,
+        "passthru": false,
+        "label": "100 ml",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "teal",
+        "className": "",
+        "icon": "fa-tint",
+        "payload": "A",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 130,
+        "y": 60,
+        "wires": [
+            [
+                "bf41547e78254b9b",
+                "b4965feadebe7868"
+            ]
+        ]
+    },
+    {
+        "id": "95d3a58b9c990ec6",
+        "type": "ui_button",
+        "z": "e255beb7def6ab14",
+        "name": "",
+        "group": "7fcf760accdaa9c2",
+        "order": 7,
+        "width": 3,
+        "height": 2,
+        "passthru": false,
+        "label": "150 ml",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "teal",
+        "className": "",
+        "icon": "fa-shower",
+        "payload": "B",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 130,
+        "y": 140,
+        "wires": [
+            [
+                "bf41547e78254b9b",
+                "b4965feadebe7868"
+            ]
+        ]
+    },
+    {
+        "id": "e5f8dd9c16838d69",
+        "type": "ui_button",
+        "z": "e255beb7def6ab14",
+        "name": "",
+        "group": "7fcf760accdaa9c2",
+        "order": 12,
+        "width": 3,
+        "height": 2,
+        "passthru": false,
+        "label": "200 ml",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "teal",
+        "className": "",
+        "icon": "fa-umbrella",
+        "payload": "C",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 130,
+        "y": 220,
+        "wires": [
+            [
+                "bf41547e78254b9b",
+                "b4965feadebe7868"
+            ]
+        ]
+    },
+    {
+        "id": "266cdbfc07797641",
+        "type": "ui_button",
+        "z": "e255beb7def6ab14",
+        "name": "",
+        "group": "64ec272c1b92e46b",
+        "order": 2,
+        "width": 4,
+        "height": 3,
+        "passthru": false,
+        "label": "Start IV-drop",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "green",
+        "className": "",
+        "icon": "fa-eyedropper",
+        "payload": "D",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 90,
+        "y": 300,
+        "wires": [
+            [
+                "bf41547e78254b9b",
+                "9b67618efdd9aab2",
+                "12156df394d422fd",
+                "b2499b0d6c8f926f"
+            ]
+        ]
+    },
+    {
+        "id": "62614e06bfc710ae",
+        "type": "ui_button",
+        "z": "e255beb7def6ab14",
+        "name": "",
+        "group": "64ec272c1b92e46b",
+        "order": 9,
+        "width": 4,
+        "height": 3,
+        "passthru": false,
+        "label": "Stop IV-drop",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "red",
+        "className": "",
+        "icon": "fa-ban",
+        "payload": "E",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 90,
+        "y": 480,
+        "wires": [
+            [
+                "bf41547e78254b9b",
+                "9b67618efdd9aab2",
+                "12156df394d422fd",
+                "b2499b0d6c8f926f"
+            ]
+        ]
+    },
+    {
+        "id": "1be5e89095debf29",
+        "type": "mqtt in",
+        "z": "e255beb7def6ab14",
+        "name": "",
+        "topic": "s245033@dtu.dk/PillPall",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "520f7622581ff376",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 470,
+        "y": 280,
+        "wires": [
+            [
+                "9647a9f7af79b155"
+            ]
+        ]
+    },
+    {
+        "id": "9647a9f7af79b155",
+        "type": "function",
+        "z": "e255beb7def6ab14",
+        "name": "function 1",
+        "func": "let value = parseFloat(msg.payload);\n\nif (!isNaN(value)) {\n    msg.payload = value;\n    flow.set(\"Volume\", value);\n    return msg;\n} else {\n    return null;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 280,
+        "wires": [
+            [
+                "2576c2cbde3dedc1",
+                "07f04cc37dadb613",
+                "3a42233bfbfb65d0",
+                "2118a6ee4338e6a0"
+            ]
+        ]
+    },
+    {
+        "id": "2576c2cbde3dedc1",
+        "type": "ui_template",
+        "z": "e255beb7def6ab14",
+        "group": "fb28217d5827da23",
+        "name": "Volume status",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 20px; display: flex; align-items: center;\">\n    <i class=\"material-icons\" style=\"color: teal;\">water_drop</i>\n    <span style=\"margin-left: 10px;\">Current volume: {{msg.payload}} mL</span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1000,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "07f04cc37dadb613",
+        "type": "ui_chart",
+        "z": "e255beb7def6ab14",
+        "name": "",
+        "group": "fb28217d5827da23",
+        "order": 2,
+        "width": 9,
+        "height": 5,
+        "label": "IV-bag volume (Last hour)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#53d053",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1010,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3a42233bfbfb65d0",
+        "type": "function",
+        "z": "e255beb7def6ab14",
+        "name": "Sensor Timestamp",
+        "func": "let nowvol = new Date();\nmsg.nowvol = nowvol.toLocaleString();\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 180,
+        "wires": [
+            [
+                "63755c9d706c5c22"
+            ]
+        ]
+    },
+    {
+        "id": "63755c9d706c5c22",
+        "type": "ui_template",
+        "z": "e255beb7def6ab14",
+        "group": "fb28217d5827da23",
+        "name": "Last recieved",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 20px; display: flex; align-items: center;\">\n    <i class=\"material-icons\" style=\"color: yellow;\">access_time</i>\n    <span style=\"margin-left: 10px;\">IV-bag volume last received: {{msg.nowvol}}</span>\n</div>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1140,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "12156df394d422fd",
+        "type": "function",
+        "z": "e255beb7def6ab14",
+        "name": "IV Timestamp",
+        "func": "let now = new Date().toLocaleString();\n\nif (msg.payload === \"D\") {\n    msg.starttime = now;\n    return [msg, null];\n}\n\nif (msg.payload === \"E\") {\n    msg.stoptime = now;\n    return [null, msg];\n}\n\nreturn [null, null];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 640,
+        "wires": [
+            [
+                "5d97185bdab0e762",
+                "6b6f3f37d875e557",
+                "a5966722248d8f78"
+            ],
+            [
+                "d13dd80191579057",
+                "f47829a02850f15a"
+            ]
+        ]
+    },
+    {
+        "id": "568ec5e5cff5f6b8",
+        "type": "ui_template",
+        "z": "e255beb7def6ab14",
+        "group": "64ec272c1b92e46b",
+        "name": "Drop status",
+        "order": 15,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 20px; display: flex; align-items: center;\">\n    <i class=\"material-icons\" style=\"color: {{msg.color}};\">{{msg.icon}}</i>\n    <span style=\"margin-left: 10px;\">{{msg.text}}</span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 710,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9b67618efdd9aab2",
+        "type": "function",
+        "z": "e255beb7def6ab14",
+        "name": "Status Message",
+        "func": "\nif (msg.payload == 'D') {\n    msg.icon = \"\\u2714\";\n    msg.color = \"green\";\n    msg.text = \"IV-drop status: Open\";\n}\nelse {\n    msg.icon = \"\\u274C\";\n    msg.color = \"red\";\n    msg.text = \"IV-drop status: Closed\";\n}\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 440,
+        "wires": [
+            [
+                "568ec5e5cff5f6b8"
+            ]
+        ]
+    },
+    {
+        "id": "5d97185bdab0e762",
+        "type": "ui_template",
+        "z": "e255beb7def6ab14",
+        "group": "64ec272c1b92e46b",
+        "name": "Button pressed",
+        "order": 16,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 20px; display: flex; align-items: center;\">\n    <i class=\"material-icons\" style=\"color: yellow;\">access_time</i>\n    <span style=\"margin-left: 10px;\">Button pressed at: {{msg.nowstatus}} </span>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 740,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6b6f3f37d875e557",
+        "type": "ui_template",
+        "z": "e255beb7def6ab14",
+        "group": "64ec272c1b92e46b",
+        "name": "start time",
+        "order": 17,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 18px; display: flex; align-items: center;\">\n  <i class=\"material-icons\" style=\"color: green;\">play_arrow</i>\n  <span style=\"margin-left: 10px;\">IV-drop last startet at: {{msg.starttime}}</span>\n</div>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 740,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d13dd80191579057",
+        "type": "ui_template",
+        "z": "e255beb7def6ab14",
+        "group": "64ec272c1b92e46b",
+        "name": "stop time",
+        "order": 18,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"font-size: 18px; display: flex; align-items: center;\">\n  <i class=\"material-icons\" style=\"color: green;\">play_arrow</i>\n  <span style=\"margin-left: 10px;\">IV-drop last stopped at: {{msg.stoptime}}</span>\n</div>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 740,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b2499b0d6c8f926f",
+        "type": "switch",
+        "z": "e255beb7def6ab14",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "D",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "E",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 390,
+        "y": 820,
+        "wires": [
+            [
+                "a5966722248d8f78"
+            ],
+            [
+                "f47829a02850f15a"
+            ]
+        ]
+    },
+    {
+        "id": "a5966722248d8f78",
+        "type": "template",
+        "z": "e255beb7def6ab14",
+        "name": "Email Status ",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "IV-drop update!🚨\nThe IV-drop was started at:  {{ starttime }}. 👍\nCurrently administering the dose: {{flow.Dose}} mL.💉\nBest regards \nYour autonomous IV-drop administering and monitoring assistant 🤖 ",
+        "output": "str",
+        "x": 690,
+        "y": 800,
+        "wires": [
+            [
+                "e0dab18ca25cf467"
+            ]
+        ]
+    },
+    {
+        "id": "f47829a02850f15a",
+        "type": "template",
+        "z": "e255beb7def6ab14",
+        "name": "Email Status",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "IV-drop update!🚨\nThe IV-drop was stopped at:  {{ stoptime }}. ✋\nThe last administered dose was: {{flow.Dose}} mL.💉\nAt time of termination the volume left in IV-bag is: {{flow.Volume}}.\nBest regards \nYour autonomous IV-drop administering and monitoring assistant 🤖 ",
+        "output": "str",
+        "x": 690,
+        "y": 960,
+        "wires": [
+            [
+                "e0dab18ca25cf467"
+            ]
+        ]
+    },
+    {
+        "id": "e0dab18ca25cf467",
+        "type": "e-mail",
+        "z": "e255beb7def6ab14",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "name": "madsenfilms@gmail.com",
+        "dname": "E-Mail Update",
+        "x": 900,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "b4965feadebe7868",
+        "type": "function",
+        "z": "e255beb7def6ab14",
+        "name": "function 2",
+        "func": "if (msg.payload == 'A') {\n    flow.set(\"Dose\", 100);\n    return msg;\n}\nelse if (msg.payload == 'B') {\n    flow.set(\"Dose\", 150);\n    return msg;\n}\nelse {\n    flow.set(\"Dose\", 200);\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 1000,
+        "wires": [
+            [
+                "a5966722248d8f78",
+                "f47829a02850f15a"
+            ]
+        ]
+    },
+    {
+        "id": "2118a6ee4338e6a0",
+        "type": "switch",
+        "z": "e255beb7def6ab14",
+        "name": "Low volume register",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lte",
+                "v": "20",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 940,
+        "y": 440,
+        "wires": [
+            [
+                "6d0c9611cbc04eb6"
+            ]
+        ]
+    },
+    {
+        "id": "6d0c9611cbc04eb6",
+        "type": "template",
+        "z": "e255beb7def6ab14",
+        "name": "Low Volume Notification",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "IV-drop update!🚨\nThe IV-drop volume is low with the current volume being:  {{ flow.Volume }} mL. 💧\nConsider closing the drop soon😇\nBest regards \nYour autonomous IV-drop administering and monitoring assistant 🤖 ",
+        "output": "str",
+        "x": 970,
+        "y": 540,
+        "wires": [
+            [
+                "f65fcd48bccd73ef"
+            ]
+        ]
+    },
+    {
+        "id": "f65fcd48bccd73ef",
+        "type": "e-mail",
+        "z": "e255beb7def6ab14",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "name": "madsenfilms@gmail.com",
+        "dname": "E-Mail Update",
+        "x": 1200,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "0db10427b364c458",
+        "type": "inject",
+        "z": "e255beb7def6ab14",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "9",
+        "payloadType": "num",
+        "x": 450,
+        "y": 360,
+        "wires": [
+            [
+                "9647a9f7af79b155"
+            ]
+        ]
+    },
+    {
+        "id": "ae58471564a67fc5",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 1,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "51851eb3644e81a1",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "fe02b6c654d3b9ca",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 4,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "54a0f3bbee36b876",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 5,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "8a3414b2d51f1228",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "0a1714bfb5843d29",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 7,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "bb6839ee77d3f42f",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 8,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "9a81eb5becc6c7f8",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 10,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "114961e9847f8fde",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 11,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "89e573d3b31fe1db",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 12,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "c588f124300709cc",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 13,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "9e5992b4b24c1f09",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "64ec272c1b92e46b",
+        "order": 14,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "278190332d4c0532",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 1,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "07c1aebb90092186",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "21cda0bc9319c080",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 4,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "011cbfe90cec2389",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 5,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "b2ecc497c65e5cc9",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "467cc8bd501e6278",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 8,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "54160f2ddcc20849",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 9,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "a099d789febe3661",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 10,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "f2883fc28dd14cf2",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 11,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "b7f0aa36e960354e",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 13,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "9e38cbdcf7c0e13c",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 14,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "073ef15a958540df",
+        "type": "ui_spacer",
+        "z": "e255beb7def6ab14",
+        "name": "spacer",
+        "group": "7fcf760accdaa9c2",
+        "order": 15,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "520f7622581ff376",
+        "type": "mqtt-broker",
+        "name": "Maqiatto",
+        "broker": "maqiatto.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "7fcf760accdaa9c2",
+        "type": "ui_group",
+        "name": "Refill IV-bag",
+        "tab": "b25157bd1777aeab",
+        "order": 3,
+        "disp": true,
+        "width": 5,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "64ec272c1b92e46b",
+        "type": "ui_group",
+        "name": "Administor to patient",
+        "tab": "b25157bd1777aeab",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "fb28217d5827da23",
+        "type": "ui_group",
+        "name": "IV-bag volume status",
+        "tab": "b25157bd1777aeab",
+        "order": 2,
+        "disp": true,
+        "width": 9,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b25157bd1777aeab",
+        "type": "ui_tab",
+        "name": "Intravenupator alpha v.1",
+        "icon": "healing",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
